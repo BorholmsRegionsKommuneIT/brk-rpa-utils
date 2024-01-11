@@ -1,5 +1,3 @@
-"""
-import os
 import json
 import subprocess
 import time
@@ -10,7 +8,6 @@ import re
 import io
 from loguru import logger
 import win32com.client  # pywin32
-"""
 
 
 def _get_credentials(pam_path, robot_name, fagsystem) -> None:
@@ -50,7 +47,7 @@ def _get_credentials(pam_path, robot_name, fagsystem) -> None:
     except Exception:
         logger.error("An error occurred:", exc_info=True)
 
-    return None, None
+    return None
 
 
 def start_opus(pam_path, robot_name, sapshcut_path) -> None:
@@ -125,7 +122,7 @@ def start_ri(pam_path, robot_name, ri_url, Playwright) -> None:
         return None
 
     try:
-        browser = playwright.chromium.launch(headless=False)
+        browser = Playwright.chromium.launch(headless=False)
         context = browser.new_context(viewport={"width": 2560, "height": 1440})
         page = context.new_page()
         page.goto(ri_url)
