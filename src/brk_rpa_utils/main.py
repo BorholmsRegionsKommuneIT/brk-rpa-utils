@@ -186,6 +186,7 @@ def parse_ri_html_report_to_dataframe(mhtml_path) -> None:
 
         # Convert 'date' column to datetime
         df_mhtml['date'] = pd.to_datetime(df_mhtml['date'], format='%d%m%Y')
+        df_mhtml['antal'] = pd.to_numeric(df_mhtml['antal'])
         return df_mhtml
 
     except Exception as e:
