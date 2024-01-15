@@ -10,7 +10,7 @@ from loguru import logger
 import win32com.client  # pywin32
 
 
-def _get_credentials(pam_path, robot_name, fagsystem) -> None:
+def get_credentials(pam_path, robot_name, fagsystem) -> None:
     """
     Internal function to retrieve credentials.
 
@@ -67,7 +67,7 @@ def start_opus(pam_path, robot_name, sapshcut_path) -> None:
     """
 
     # unpacking
-    username, password = _get_credentials(pam_path, robot_name, fagsystem="opus")
+    username, password = get_credentials(pam_path, robot_name, fagsystem="opus")
 
     if not username or not password:
         logger.error("Failed to retrieve credentials for robot", exc_info=True)
@@ -115,7 +115,7 @@ def start_ri(pam_path, robot_name, ri_url, Playwright) -> None:
     }
     """
 
-    username, password = _get_credentials(pam_path, robot_name, fagsystem="rollebaseretindgang")
+    username, password = get_credentials(pam_path, robot_name, fagsystem="rollebaseretindgang")
 
     if not username or not password:
         logger.error("Failed to retrieve credentials for robot", exc_info=True)
