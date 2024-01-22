@@ -1,7 +1,8 @@
-from bs4 import BeautifulSoup  # BeautifulSoup4
-import pandas as pd
-import re
 import io
+import re
+
+import pandas as pd
+from bs4 import BeautifulSoup  # BeautifulSoup4
 from loguru import logger
 
 

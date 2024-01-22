@@ -1,8 +1,9 @@
-from brk_rpa_utils import get_credentials
 from loguru import logger
 
+from brk_rpa_utils import get_credentials
 
-def start_ri(pam_path, robot_name, ri_url, Playwright) -> None:
+
+def start_ri(pam_path, user, ri_url, playwright) -> None:
     """
     Starts s browser pointed to ri_url (fx https://portal.kmd.dk/irj/portal)
     and logs into Rollebaseret Indgang (RI) using  and credentials from PAM.
@@ -12,23 +13,23 @@ def start_ri(pam_path, robot_name, ri_url, Playwright) -> None:
 
     from playwright.sync_api import Playwright
 
-    The robot_name.json file should have the structure:
+    The <user>.json file should have the structure:
 
     {
-    "ad": { "username": "robot_name", "password": "x" },
-    "opus": { "username": "robot_name", "password": "x" },
-    "rollebaseretindgang": { "username": "robot_name", "password": "x" }
+    "ad": { "username": "x", "password": "x" },
+    "opus": { "username": "x", "password": "x" },
+    "rollebaseretindgang": { "username": "x", "password": "x" }
     }
     """
 
-    username, password = get_credentials(pam_path, robot_name, fagsystem="rollebaseretindgang")
+    username, password = get_credentials(pam_path, user, fagsystem="rollebaseretindgang")
 
     if not username or not password:
         logger.error("Failed to retrieve credentials for robot", exc_info=True)
         return None
 
     try:
-        browser = Playwright.chromium.launch(headless=False)
+        browser = playwright.chromium.launch(headless=False)
         context = browser.new_context(viewport={"width": 2560, "height": 1440})
         page = context.new_page()
         page.goto(ri_url)

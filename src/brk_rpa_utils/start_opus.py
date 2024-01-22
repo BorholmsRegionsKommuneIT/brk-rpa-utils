@@ -1,31 +1,33 @@
-from brk_rpa_utils import get_credentials
 import subprocess
 import time
-from loguru import logger
+
 import win32com.client  # pywin32
+from loguru import logger
+
+from brk_rpa_utils import get_credentials
 
 
-def start_opus(pam_path, robot_name, sapshcut_path) -> None:
+def start_opus(pam_path, user, sapshcut_path) -> None:
     """
     Unpack like so:
-    username, password = get_credentials(pam_path, robot_name, fagsystem="opus")
+    username, password = get_credentials(pam_path, user, fagsystem="opus")
 
     Starts Opus using sapshcut.exe and credentials from PAM.
 
     load_dotenv()
     sapshcut_path = Path(os.getenv("SAPSHCUT_PATH"))
 
-    The robot_name.json file should have the structure:
+    The <user>.json file should have the structure:
 
     {
-    "ad": { "username": "robot_name", "password": "x" },
-    "opus": { "username": "robot_name", "password": "x" },
-    "rollebaseretindgang": { "username": "robot_name", "password": "x" }
+    "ad": { "username": "x", "password": "x" },
+    "opus": { "username": "x", "password": "x" },
+    "rollebaseretindgang": { "username": "x", "password": "x" }
     }
     """
 
     # unpacking
-    username, password = get_credentials(pam_path, robot_name, fagsystem="opus")
+    username, password = get_credentials(pam_path, user, fagsystem="opus")
 
     if not username or not password:
         logger.error("Failed to retrieve credentials for robot", exc_info=True)

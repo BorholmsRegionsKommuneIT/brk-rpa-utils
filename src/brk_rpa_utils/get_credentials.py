@@ -1,9 +1,10 @@
 import json
 from pathlib import Path
+
 from loguru import logger
 
 
-def get_credentials(pam_path, robot_name, fagsystem) -> None:
+def get_credentials(pam_path, user, fagsystem) -> None:
     """
     Internal function to retrieve credentials.
 
@@ -12,9 +13,9 @@ def get_credentials(pam_path, robot_name, fagsystem) -> None:
     Define pam_path in an .env file in the root of your project. Add paths like so:
     SAPSHCUT_PATH=C:/Program Files (x86)/SAP/FrontEnd/SAPgui/sapshcut.exe
 
-    robot_name = getpass.getuser()
+    user = getpass.getuser()
 
-    Under the pam_path uri der should be a robot_name.json file with the structure:
+    Under the pam_path uri der should be a user.json file with the structure:
 
     {
     "ad": { "username": "robot00X", "password": "x" },
@@ -22,7 +23,7 @@ def get_credentials(pam_path, robot_name, fagsystem) -> None:
     "rollebaseretindgang": { "username": "jrrobot00X", "password": "x" }
     }
     """
-    pass_file = Path(pam_path) / robot_name / f"{robot_name}.json"
+    pass_file = Path(pam_path) / user / f"{user}.json"
 
     try:
         with open(pass_file) as file:
