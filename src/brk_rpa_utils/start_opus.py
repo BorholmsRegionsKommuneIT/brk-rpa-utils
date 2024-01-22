@@ -7,6 +7,9 @@ import win32com.client  # pywin32
 
 def start_opus(pam_path, robot_name, sapshcut_path) -> None:
     """
+    Unpack like so:
+    username, password = get_credentials(pam_path, robot_name, fagsystem="opus")
+
     Starts Opus using sapshcut.exe and credentials from PAM.
 
     load_dotenv()
