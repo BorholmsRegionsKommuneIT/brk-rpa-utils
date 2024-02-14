@@ -43,6 +43,7 @@ def start_ri(pam_path, user, ri_url, playwright) -> None:
 
         return page, context, browser
 
-    except Exception:
-        logger.error("An error occurred while logging into the portal", exc_info=True)
+    except Exception as e:
+        msg = f"An error occurred while logging into the portal: {e}"
+        logger.error(msg, exc_info=True)
         return None

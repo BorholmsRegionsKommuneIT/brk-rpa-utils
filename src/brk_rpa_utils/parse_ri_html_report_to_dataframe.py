@@ -18,40 +18,43 @@ def parse_ri_html_report_to_dataframe(mhtml_path) -> None:
     """
     try:
         # Read MHTML file
-        with open(mhtml_path, 'r', encoding='utf-8') as file:
+        with open(mhtml_path, encoding="utf-8") as file:
             content = file.read()
 
         # Find the HTML part of the file
-        match = re.search(r'<html.*<\/html>', content, re.DOTALL)
+        match = re.search(r"<html.*<\/html>", content, re.DOTALL)
         if not match:
-            raise ValueError("No HTML content found in the file")
+            msg = "No HTML content found in the file"
+            raise ValueError(msg)
         html_content = match.group(0)
 
         # Parse the HTML content using BeautifulSoup
-        soup = BeautifulSoup(html_content, 'lxml')
+        soup = BeautifulSoup(html_content, "html.parser")
 
         # Find all tables within the parsed HTML
-        tables = soup.find_all('table')
+        tables = soup.find_all("table")
         if not tables:
-            raise ValueError("No tables found in the HTML content")
+            msg = "No tables found in the HTML content"
+            raise ValueError(msg)
 
         # Select the largest table based on character count
         largest_table = max(tables, key=lambda table: len(str(table)))
 
         # Convert the largest HTML table to a pandas DataFrame
-        df_mhtml = pd.read_html(io.StringIO(str(largest_table)), decimal=',', thousands='.', header=None)
+        df_mhtml = pd.read_html(io.StringIO(str(largest_table)), decimal=",", thousands=".", header=None)
         if not df_mhtml:
-            raise ValueError("Failed to parse the largest table into a DataFrame")
+            msg = "Failed to parse the largest table into a DataFrame"
+            raise ValueError(msg)
 
         df_mhtml = df_mhtml[0]
         df_mhtml.columns = df_mhtml.iloc[0]
         df_mhtml = df_mhtml.drop(0)
         df_mhtml.reset_index(drop=True, inplace=True)
-        df_mhtml.rename(columns={'Slut F-periode': 'date', 'Lønart': 'lonart', 'Antal': 'antal'}, inplace=True)
+        df_mhtml.rename(columns={"Slut F-periode": "date", "Lønart": "lonart", "Antal": "antal"}, inplace=True)
 
         # Convert 'date' column to datetime
-        df_mhtml['date'] = pd.to_datetime(df_mhtml['date'], format='%d%m%Y')
-        df_mhtml['antal'] = pd.to_numeric(df_mhtml['antal'])
+        df_mhtml["date"] = pd.to_datetime(df_mhtml["date"], format="%d%m%Y")
+        df_mhtml["antal"] = pd.to_numeric(df_mhtml["antal"])
         return df_mhtml
 
     except Exception as e:
